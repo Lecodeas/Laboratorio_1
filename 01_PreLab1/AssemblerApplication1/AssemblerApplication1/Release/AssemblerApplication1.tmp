@@ -1,0 +1,33 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Release</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc</FILE>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.INC</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Release\AssemblerApplication1.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>AssemblerApplication1.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>AssemblerApplication1.map</FILE>
+  <FILE>AssemblerApplication1.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <Setup><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm</FILE><LINE>28</LINE></Setup>
+  <Loop><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm</FILE><LINE>49</LINE></Loop>
+  <Aumentar><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm</FILE><LINE>65</LINE></Aumentar>
+  <Decrementar><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm</FILE><LINE>83</LINE></Decrementar>
+  <Delay1><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm</FILE><LINE>68</LINE></Delay1>
+  <Delay2><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm</FILE><LINE>86</LINE></Delay2>
+ </LABELS>
+</ASSEMBLER_INFO>

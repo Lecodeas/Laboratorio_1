@@ -1,0 +1,35 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc</FILE>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.INC</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Debug\Lab1_Sumador.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Lab1_Sumador.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Lab1_Sumador.map</FILE>
+  <FILE>Lab1_Sumador.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <Setup><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>28</LINE></Setup>
+  <Loop><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>53</LINE></Loop>
+  <Contador1><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>62</LINE></Contador1>
+  <Contador2><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>74</LINE></Contador2>
+  <AumentarB><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>86</LINE></AumentarB>
+  <DecrementarB><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>104</LINE></DecrementarB>
+  <Delay1><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>89</LINE></Delay1>
+  <Delay2><FILE>C:\Users\Admin\Desktop\Assembler Labs\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>107</LINE></Delay2>
+ </LABELS>
+</ASSEMBLER_INFO>
