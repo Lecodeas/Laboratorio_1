@@ -6,7 +6,7 @@
 ; Proyecto: Prelab 1
 ; Hardware: ATMEGA328P
 ; Creado: 27/01/2024
-; Ultima modificacion: 28/01/2024
+; Ultima modificacion: 30/01/2024
 ;-----------------------------------------------
 
 .include "M328PDEF.INC" ; Nombres de Registros
@@ -33,69 +33,61 @@ Setup:
 	STS CLKPR, R16  ; 0011 es Divisor entre 8
 
 	; Entradas (PORTD a Button 1 y 2) y Salidas (PORTB a LEDs)
-	LDI R16, 0xFF
-	OUT DDRB, R16 ; Configura todo PORTB a Salida
+	LDI R16, 0x0F
+	OUT DDRB, R16 ; Configura Primeros 4 de PORTB a Salida
 	
 	CLR R17
-	OUT DDRD, R17 ; Configura todo PORTD a Entradas
+	LDI R16, 0xFF
+	OUT DDRD, R17 ; Configura todos de PORTD a Entradas
 	OUT PORTD, R16 ; Configurar todos Pull-Up
 
+	; Registro para monitoreo de estados previos
+	LDI R18, 0xFF
+	
 	; Registro para Contador
 	LDI R19, 0x00
+	
 
 ;-----------------------------------------------
 ; LOOP de flash memory
 
 Loop:
-	; Antirrebote de Pin D0
+	; Antirrebote de PinD
 	IN R16, PIND
-	SBRS R16, PD0 ; Salto si PD0 es 1 (Logica inversa)
-	RJMP Aumentar; Antirrebote y hacia Operaciones de Aumentar
+	; Ya tengo estados previos en R19
+	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+	BREQ Loop ; Si no han cambiado, mantengo el loop
+	CALL Antirrebote
+	IN R16, PIND
+	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+	BREQ Loop ; Si no han cambiado, mantengo el loop
+	; Si cambiaron
+	MOV R18, R16 ; Modifico el estado actual y
 
-	; Antirrebote de Pin D1
-	SBRS R16, PD1 ; Salto si PD1 es 1 	
-	RJMP Decrementar; Antirrebote y hacia Operaciones de Decrementar
+Aumentar:
+	SBRC R16, PD0 ; Determino si el boton de aumentar esta presionado 
+	RJMP Decrementar ; De no estar presionado, vuelvo al loop
+	INC R19 ; De estar presionado, aumento contador R19
+	OUT PINB, R19 ; Y lo transporto a PINB
 
-	RJMP Loop ; Vuelve a Loop
+Decrementar:
+	SBRC R16, PD1 ; Determino si el boton de decrementar esta presionado 
+	RJMP Loop ; De no estar presionado, vuelvo al loop
+	DEC R19 ; De estar presionado, disminuyo contador R19
+	OUT PINB, R19 ; Y lo transporto a PINB
+
+	RJMP Loop ; Al terminar, hago el loop
 
 ;-----------------------------------------------
 ; Subrutinas
 ;-----------------------------------------------
 
-Aumentar:
-	; Antirrebote ------------------------------
-	LDI R17, 100 ; Esperara 100 ciclos
-	Delay1:
-		DEC R17
-		BRNE Delay1 ; Disminuye cada ciclo hasta 0
-	
-	; Funcion de Aumentar ----------------------
-	INC R19 ; Incrementa el Contador
-	OUT PORTB, R19 ; Modifica la salida en PORTB 
-
-	; Si despues del tiempo sigue en 0 vuelve a leer otro antirrebote
-	SBIS PIND, PD0 ; Salto si PD0 es 1
-	RJMP Aumentar;
-
-	RJMP Loop
-;-----------------------------------------------
-
-Decrementar:
-	; Antirrebote ------------------------------
-	LDI R17, 100 ; Esperara 100 ciclos
-	Delay2:
-		DEC R17
-		BRNE Delay2 ; Disminuye cada ciclo hasta 0
-
-	; Funcion de Decrementar ----------------------
-	DEC R19 ; Incrementa el Contador
-	OUT PORTB, R19 ; Modifica la salida en PORTB 
-	
-	; Si despues del tiempo sigue en 0 vuelve a leer otro antirrebote
-	SBIS PIND, PD1 ; Salto si PD1 es 1
-	
-	RJMP Decrementar;
-
-	RJMP Loop
+Antirrebote:
+	LDI R17, 100 ; 100 Ciclos entre lecturas
+Delay:
+	DEC R17 ; Disminuye el contador
+	CPI R17, 0x00 ; Compara Contador con 0
+	BRNE Delay ; Vuelve a Delay si no son iguales
+	RET
 
 ;-----------------------------------------------

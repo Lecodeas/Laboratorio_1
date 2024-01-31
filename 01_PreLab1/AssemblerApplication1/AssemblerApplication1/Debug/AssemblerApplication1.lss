@@ -1,10 +1,10 @@
 
-AVRASM ver. 2.2.8  C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm Mon Jan 29 17:23:51 2024
+AVRASM ver. 2.2.8  C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm Tue Jan 30 18:20:40 2024
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
-C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm(12): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.INC'
+C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm(12): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.INC'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
-C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm(12): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.INC'
+C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\01_PreLab1\AssemblerApplication1\AssemblerApplication1\Contador.asm(12): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.INC'
                                  
                                  ;-----------------------------------------------
                                  
@@ -994,7 +994,7 @@ C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\Assembler
                                  ; Proyecto: Prelab 1
                                  ; Hardware: ATMEGA328P
                                  ; Creado: 27/01/2024
-                                 ; Ultima modificacion: 28/01/2024
+                                 ; Ultima modificacion: 30/01/2024
                                  ;-----------------------------------------------
                                  
                                  .include "M328PDEF.INC" ; Nombres de Registros
@@ -1064,70 +1064,62 @@ C:\Users\Admin\Desktop\Assembler Labs\01_PreLab1\AssemblerApplication1\Assembler
 000008 9300 0061                 	STS CLKPR, R16  ; 0011 es Divisor entre 8
                                  
                                  	; Entradas (PORTD a Button 1 y 2) y Salidas (PORTB a LEDs)
-00000a ef0f                      	LDI R16, 0xFF
-00000b b904                      	OUT DDRB, R16 ; Configura todo PORTB a Salida
+00000a e00f                      	LDI R16, 0x0F
+00000b b904                      	OUT DDRB, R16 ; Configura Primeros 4 de PORTB a Salida
                                  	
 00000c 2711                      	CLR R17
-00000d b91a                      	OUT DDRD, R17 ; Configura todo PORTD a Entradas
-00000e b90b                      	OUT PORTD, R16 ; Configurar todos Pull-Up
+00000d ef0f                      	LDI R16, 0xFF
+00000e b91a                      	OUT DDRD, R17 ; Configura todos de PORTD a Entradas
+00000f b90b                      	OUT PORTD, R16 ; Configurar todos Pull-Up
                                  
+                                 	; Registro para monitoreo de estados previos
+000010 ef2f                      	LDI R18, 0xFF
+                                 	
                                  	; Registro para Contador
-00000f e030                      	LDI R19, 0x00
+000011 e030                      	LDI R19, 0x00
+                                 	
                                  
                                  ;-----------------------------------------------
                                  ; LOOP de flash memory
                                  
                                  Loop:
-                                 	; Antirrebote de Pin D0
-000010 b109                      	IN R16, PIND
-000011 ff00                      	SBRS R16, PD0 ; Salto si PD0 es 1 (Logica inversa)
-000012 c003                      	RJMP Aumentar; Antirrebote y hacia Operaciones de Aumentar
+                                 	; Antirrebote de PinD
+000012 b109                      	IN R16, PIND
+                                 	; Ya tengo estados previos en R19
+000013 1702                      	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+000014 f3e9                      	BREQ Loop ; Si no han cambiado, mantengo el loop
+000015 940e 0024                 	CALL Antirrebote
+000017 b109                      	IN R16, PIND
+000018 1702                      	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+000019 f3c1                      	BREQ Loop ; Si no han cambiado, mantengo el loop
+                                 	; Si cambiaron
+00001a 2f20                      	MOV R18, R16 ; Modifico el estado actual y
                                  
-                                 	; Antirrebote de Pin D1
-000013 ff01                      	SBRS R16, PD1 ; Salto si PD1 es 1 	
-000014 c009                      	RJMP Decrementar; Antirrebote y hacia Operaciones de Decrementar
+                                 Aumentar:
+00001b fd00                      	SBRC R16, PD0 ; Determino si el boton de aumentar esta presionado 
+00001c c002                      	RJMP Decrementar ; De no estar presionado, vuelvo al loop
+00001d 9533                      	INC R19 ; De estar presionado, aumento contador R19
+00001e b933                      	OUT PINB, R19 ; Y lo transporto a PINB
                                  
-000015 cffa                      	RJMP Loop ; Vuelve a Loop
+                                 Decrementar:
+00001f fd01                      	SBRC R16, PD1 ; Determino si el boton de decrementar esta presionado 
+000020 cff1                      	RJMP Loop ; De no estar presionado, vuelvo al loop
+000021 953a                      	DEC R19 ; De estar presionado, disminuyo contador R19
+000022 b933                      	OUT PINB, R19 ; Y lo transporto a PINB
+                                 
+000023 cfee                      	RJMP Loop ; Al terminar, hago el loop
                                  
                                  ;-----------------------------------------------
                                  ; Subrutinas
                                  ;-----------------------------------------------
                                  
-                                 Aumentar:
-                                 	; Antirrebote ------------------------------
-000016 e614                      	LDI R17, 100 ; Esperara 100 ciclos
-                                 	Delay1:
-000017 951a                      		DEC R17
-000018 f7f1                      		BRNE Delay1 ; Disminuye cada ciclo hasta 0
-                                 	
-                                 	; Funcion de Aumentar ----------------------
-000019 9533                      	INC R19 ; Incrementa el Contador
-00001a b935                      	OUT PORTB, R19 ; Modifica la salida en PORTB 
-                                 
-                                 	; Si despues del tiempo sigue en 0 vuelve a leer otro antirrebote
-00001b 9b48                      	SBIS PIND, PD0 ; Salto si PD0 es 1
-00001c cff9                      	RJMP Aumentar;
-                                 
-00001d cff2                      	RJMP Loop
-                                 ;-----------------------------------------------
-                                 
-                                 Decrementar:
-                                 	; Antirrebote ------------------------------
-00001e e614                      	LDI R17, 100 ; Esperara 100 ciclos
-                                 	Delay2:
-00001f 951a                      		DEC R17
-000020 f7f1                      		BRNE Delay2 ; Disminuye cada ciclo hasta 0
-                                 
-                                 	; Funcion de Decrementar ----------------------
-000021 953a                      	DEC R19 ; Incrementa el Contador
-000022 b935                      	OUT PORTB, R19 ; Modifica la salida en PORTB 
-                                 	
-                                 	; Si despues del tiempo sigue en 0 vuelve a leer otro antirrebote
-000023 9b49                      	SBIS PIND, PD1 ; Salto si PD1 es 1
-                                 	
-000024 cff9                      	RJMP Decrementar;
-                                 
-000025 cfea                      	RJMP Loop
+                                 Antirrebote:
+000024 e614                      	LDI R17, 100 ; 100 Ciclos entre lecturas
+                                 Delay:
+000025 951a                      	DEC R17 ; Disminuye el contador
+000026 3010                      	CPI R17, 0x00 ; Compara Contador con 0
+000027 f7e9                      	BRNE Delay ; Vuelve a Delay si no son iguales
+000028 9508                      	RET
                                  
 
 
@@ -1148,37 +1140,37 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  14 r17:   6 r18:   0 r19:   5 r20:   0 
+r13:   0 r14:   0 r15:   0 r16:  19 r17:   5 r18:   4 r19:   5 r20:   0 
 r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 3 out of 35 (8.6%)
+Registers used: 4 out of 35 (11.4%)
 
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   2 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   2 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
+brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   1 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   1 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   1 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :   8 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
+cpi   :   1 cpse  :   0 dec   :   2 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   1 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :   9 lds   :   0 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :   1 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   7 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   2 
-sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   2 sec   :   0 seh   :   0 
+push  :   0 rcall :   0 ret   :   1 reti  :   0 rjmp  :   3 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
+sbiw  :   0 sbr   :   0 sbrc  :   2 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   2 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 11 out of 113 (9.7%)
+Instructions used: 16 out of 113 (14.2%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00004c     76      0     76   32768   0.2%
+[.cseg] 0x000000 0x000052     82      0     82   32768   0.3%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
