@@ -6,7 +6,7 @@
 ; Proyecto: Laboratorio 1
 ; Hardware: ATMEGA328P
 ; Creado: 29/01/2024
-; Ultima modificacion: 29/01/2024
+; Ultima modificacion: 31/01/2024
 ;-----------------------------------------------
 
 .include "M328PDEF.INC" ; Nombres de Registros
@@ -32,91 +32,86 @@ Setup:
 	LDI R16, 0b0000_0100
 	STS CLKPR, R16  ; 0011 es Divisor entre 16
 
-	; Entradas (PORTD a Botones) y Salidas (PORTB a LEDs)
-	LDI R16, 0xFF
-	OUT DDRB, R16 ; Configura todo PORTB a Salida
+	; Salidas (PORTB y PORTC a LEDs)
+	LDI R16, 0x0F
+	OUT DDRB, R16 ; Configura Primeros 4 de PORTB a Salida
+	OUT DDRC, R16 ; Configura Primeros 4 de PORTC a Salida
 	
+	; Entradas (PORTD a Buttons) 
 	CLR R17
-	OUT DDRD, R17 ; Configura todo PORTD a Entradas
+	LDI R16, 0xFF
+	OUT DDRD, R17 ; Configura todos de PORTD a Entradas
 	OUT PORTD, R16 ; Configurar todos Pull-Up
 
-	; Salidas (PORTC a LEDs)
-	OUT DDRC, R16 ; Configura todo PORTC a Salida
-
-	; Registro para Contador1 y 2
-	LDI R19, 0x00
-	LDI R20, 0x00
+	; Registro para monitoreo de estados previos
+	LDI R18, 0xFF
+	
+	; Registros para Contadores
+	LDI R19, 0x00 ; Contador B
+	LDI R20, 0x00 ; Contador C
+	
 
 ;-----------------------------------------------
 ; LOOP de flash memory
 
 Loop:
-	RJMP Contador1 ; Contador de PORTB
-	RJMP Contador2 ; Contador de PORTC
-	RJMP Loop ; Vuelve a Loop
+	; Antirrebote de PinD
+	IN R16, PIND
+	; Ya tengo estados previos en R19
+	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+	BREQ Loop ; Si no han cambiado, mantengo el loop
+	CALL Antirrebote
+	IN R16, PIND
+	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+	BREQ Loop ; Si no han cambiado, mantengo el loop
+	; Si cambiaron
+	MOV R18, R16 ; Modifico el estado actual y
+	
+	CALL Contadores ; Verifico ambos contadores
+
+	RJMP Loop ; Al terminar vuelve al loop
 
 ;-----------------------------------------------
 ; Subrutinas
 ;-----------------------------------------------
 
-Contador1:
-	; Antirrebote de Pin D0
-	IN R16, PIND
-	SBRS R16, PD0 ; Salto si PD0 es 1 (Logica inversa)
-	RJMP AumentarB; Antirrebote y hacia Operaciones de Aumentar
-
-	; Antirrebote de Pin D1
-	SBRS R16, PD1 ; Salto si PD1 es 1 	
-	RJMP DecrementarB; Antirrebote y hacia Operaciones de Decrementar
+Antirrebote:
+	LDI R17, 100 ; 100 Ciclos entre lecturas
+Delay:
+	DEC R17 ; Disminuye el contador
+	CPI R17, 0x00 ; Compara Contador con 0
+	BRNE Delay ; Vuelve a Delay si no son iguales
+	RET
 
 ;-----------------------------------------------
 
-Contador2:
-	; Antirrebote de Pin D2
-	IN R16, PIND
-	SBRS R16, PD2 ; Salto si PD2 es 1 
-	RJMP AumentarC; Antirrebote y hacia Operaciones de Aumentar
-
-	; Antirrebote de Pin D1
-	SBRS R16, PD1 ; Salto si PD1 es 1 	
-	RJMP DecrementarC; Antirrebote y hacia Operaciones de Decrementar
-
-;-----------------------------------------------
-
+Contadores:
+; CONTADOR B R19
 AumentarB:
-	; Antirrebote ------------------------------
-	LDI R17, 100 ; Esperara 100 ciclos
-	Delay1:
-		DEC R17
-		BRNE Delay1 ; Disminuye cada ciclo hasta 0
-	
-	; Funcion de Aumentar ----------------------
-	INC R19 ; Incrementa el Contador
-	OUT PORTB, R19 ; Modifica la salida en PORTB 
-
-	; Si despues del tiempo sigue en 0 vuelve a leer otro antirrebote
-	SBIS PIND, PD0 ; Salto si PD0 es 1
-	RJMP Aumentar;
-
-	RJMP Loop
-;-----------------------------------------------
+	SBRC R16, PD0 ; Determino si el boton de aumentar esta presionado 
+	RJMP DecrementarB ; De no estar presionado, verifico el otro botón
+	INC R19 ; De estar presionado, aumento contador R19
+	OUT PINB, R19 ; Y lo transporto a PINB
 
 DecrementarB:
-	; Antirrebote ------------------------------
-	LDI R17, 100 ; Esperara 100 ciclos
-	Delay2:
-		DEC R17
-		BRNE Delay2 ; Disminuye cada ciclo hasta 0
+	SBRC R16, PD1 ; Determino si el boton de decrementar esta presionado 
+	RJMP AumentarC ; De no estar presionado, vuelvo al CALL
+	DEC R19 ; De estar presionado, disminuyo contador R19
+	OUT PINB, R19 ; Y lo transporto a PINB
 
-	; Funcion de Decrementar ----------------------
-	DEC R19 ; Incrementa el Contador
-	OUT PORTB, R19 ; Modifica la salida en PORTB 
-	
-	; Si despues del tiempo sigue en 0 vuelve a leer otro antirrebote
-	SBIS PIND, PD1 ; Salto si PD1 es 1
-	
-	RJMP Decrementar;
+; CONTADOR C R20
+AumentarC:
+	SBRC R16, PD2 ; Determino si el boton de aumentar esta presionado 
+	RJMP DecrementarC ; De no estar presionado, verifico el otro botón
+	INC R20 ; De estar presionado, aumento contador R20
+	OUT PINC, R20 ; Y lo transporto a PINC
 
-	RJMP Loop
+DecrementarC:
+	SBRC R16, PD3 ; Determino si el boton de decrementar esta presionado 
+	RET ; De no estar presionado, vuelvo al CALL
+	DEC R20 ; De estar presionado, disminuyo contador R20
+	OUT PINC, R20 ; Y lo transporto a PINC
+
+	RET ; Al terminar, vuelvo al CALL
 
 ;-----------------------------------------------
