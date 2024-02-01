@@ -25,12 +25,14 @@
  <LABELS>
   <Setup><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>28</LINE></Setup>
   <Loop><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>57</LINE></Loop>
-  <Antirrebote><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>78</LINE></Antirrebote>
-  <Contadores><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>88</LINE></Contadores>
-  <Delay><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>80</LINE></Delay>
-  <AumentarB><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>90</LINE></AumentarB>
-  <DecrementarB><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>96</LINE></DecrementarB>
-  <AumentarC><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>103</LINE></AumentarC>
-  <DecrementarC><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>109</LINE></DecrementarC>
+  <Antirrebote><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>82</LINE></Antirrebote>
+  <Contadores><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>92</LINE></Contadores>
+  <Combinacion><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>119</LINE></Combinacion>
+  <Sumas><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>132</LINE></Sumas>
+  <Delay><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>84</LINE></Delay>
+  <Aumentar1><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>94</LINE></Aumentar1>
+  <Decrementar1><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>99</LINE></Decrementar1>
+  <Aumentar2><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>105</LINE></Aumentar2>
+  <Decrementar2><FILE>C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm</FILE><LINE>110</LINE></Decrementar2>
  </LABELS>
 </ASSEMBLER_INFO>
