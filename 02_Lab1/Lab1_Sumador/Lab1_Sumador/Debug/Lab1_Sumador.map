@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm Wed Jan 31 19:14:41 2024
+AVRASM ver. 2.2.8  C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm Thu Feb 01 13:07:14 2024
 
 
 EQU  SIGNATURE_000 0000001e
@@ -696,13 +696,13 @@ EQU  TWIaddr      00000030
 EQU  SPMRaddr     00000032
 EQU  INT_VECTORS_SIZE 00000034
 CSEG Setup        00000004
-CSEG Loop         00000014
-CSEG Antirrebote  00000024
-CSEG Contadores   00000029
-CSEG Combinacion  00000036
-CSEG Sumas        0000003e
-CSEG Delay        00000025
-CSEG Aumentar1    00000029
-CSEG Decrementar1 0000002c
-CSEG Aumentar2    0000002f
-CSEG Decrementar2 00000032
+CSEG Loop         00000015
+CSEG Antirrebote  00000025
+CSEG Contadores   0000002a
+CSEG Combinacion  00000037
+CSEG Sumas        0000003f
+CSEG Delay        00000026
+CSEG Aumentar1    0000002a
+CSEG Decrementar1 0000002d
+CSEG Aumentar2    00000030
+CSEG Decrementar2 00000033

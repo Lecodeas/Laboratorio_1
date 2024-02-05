@@ -38,6 +38,7 @@ Setup:
 	OUT DDRC, R16 ; Configura PORTC a Salida
 	
 	; Entradas (PORTB a Buttons)
+	LDI R17, 0x00
 	OUT DDRB, R17 ; Configura todos de PORTD a Entradas
 	OUT PORTB, R16 ; Configurar todos Pull-Up
 

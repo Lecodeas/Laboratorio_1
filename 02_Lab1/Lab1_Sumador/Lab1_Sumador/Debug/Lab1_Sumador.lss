@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm Wed Jan 31 19:14:41 2024
+AVRASM ver. 2.2.8  C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm Thu Feb 01 13:07:14 2024
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1_Sumador\Lab1_Sumador\Sumador.asm(12): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.INC'
@@ -1069,17 +1069,18 @@ C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1
 00000c b907                      	OUT DDRC, R16 ; Configura PORTC a Salida
                                  	
                                  	; Entradas (PORTB a Buttons)
-00000d b914                      	OUT DDRB, R17 ; Configura todos de PORTD a Entradas
-00000e b905                      	OUT PORTB, R16 ; Configurar todos Pull-Up
+00000d e010                      	LDI R17, 0x00
+00000e b914                      	OUT DDRB, R17 ; Configura todos de PORTD a Entradas
+00000f b905                      	OUT PORTB, R16 ; Configurar todos Pull-Up
                                  
                                  	; Registro para monitoreo de estados previos
-00000f ef2f                      	LDI R18, 0xFF
+000010 ef2f                      	LDI R18, 0xFF
                                  	
                                  	; Registros para Contadores
-000010 e030                      	LDI R19, 0x00 ; Contador 1
-000011 e040                      	LDI R20, 0x00 ; Contador 2
-000012 e050                      	LDI R21, 0x00 ; OR de 1 y 2
-000013 e060                      	LDI R22, 0x00 ; Suma de 1 y 2
+000011 e030                      	LDI R19, 0x00 ; Contador 1
+000012 e040                      	LDI R20, 0x00 ; Contador 2
+000013 e050                      	LDI R21, 0x00 ; OR de 1 y 2
+000014 e060                      	LDI R22, 0x00 ; Suma de 1 y 2
                                  	
                                  
                                  ;-----------------------------------------------
@@ -1087,87 +1088,87 @@ C:\Users\Admin\Desktop\Assembler Labs\01_Laboratorio1\Laboratorio_1\02_Lab1\Lab1
                                  
                                  Loop:
                                  	; Antirrebote de PinB
-000014 b103                      	IN R16, PINB
+000015 b103                      	IN R16, PINB
                                  	; Ya tengo estados previos en R19
-000015 1702                      	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
-000016 f3e9                      	BREQ Loop ; Si no han cambiado, mantengo el loop
-000017 940e 0024                 	CALL Antirrebote
-000019 b103                      	IN R16, PINB
-00001a 1702                      	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
-00001b f3c1                      	BREQ Loop ; Si no han cambiado, mantengo el loop
+000016 1702                      	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+000017 f3e9                      	BREQ Loop ; Si no han cambiado, mantengo el loop
+000018 940e 0025                 	CALL Antirrebote
+00001a b103                      	IN R16, PINB
+00001b 1702                      	CP R16, R18 ; Comparo los estados actual y previo por algun cambio
+00001c f3c1                      	BREQ Loop ; Si no han cambiado, mantengo el loop
                                  	; Si cambiaron
-00001c 2f20                      	MOV R18, R16 ; Modifico el estado actual y
+00001d 2f20                      	MOV R18, R16 ; Modifico el estado actual y
                                  	
-00001d 940e 0029                 	CALL Contadores ; Verifico ambos contadores
+00001e 940e 002a                 	CALL Contadores ; Verifico ambos contadores
                                  	
-00001f 940e 0036                 	CALL Combinacion ; Combina los contadores para ponerlos en PIND
+000020 940e 0037                 	CALL Combinacion ; Combina los contadores para ponerlos en PIND
                                  
-000021 940e 003e                 	CALL Sumas ; Verifico el boton de Suma
+000022 940e 003f                 	CALL Sumas ; Verifico el boton de Suma
                                  
-000023 cff0                      	RJMP Loop ; Al terminar vuelve al loop
+000024 cff0                      	RJMP Loop ; Al terminar vuelve al loop
                                  
                                  ;-----------------------------------------------
                                  ; Subrutinas
                                  ;-----------------------------------------------
                                  
                                  Antirrebote:
-000024 e614                      	LDI R17, 100 ; 100 Ciclos entre lecturas
+000025 e614                      	LDI R17, 100 ; 100 Ciclos entre lecturas
                                  Delay:
-000025 951a                      	DEC R17 ; Disminuye el contador
-000026 3010                      	CPI R17, 0x00 ; Compara Contador con 0
-000027 f7e9                      	BRNE Delay ; Vuelve a Delay si no son iguales
-000028 9508                      	RET
+000026 951a                      	DEC R17 ; Disminuye el contador
+000027 3010                      	CPI R17, 0x00 ; Compara Contador con 0
+000028 f7e9                      	BRNE Delay ; Vuelve a Delay si no son iguales
+000029 9508                      	RET
                                  
                                  ;-----------------------------------------------
                                  
                                  Contadores:
                                  ; CONTADOR 1 R19
                                  Aumentar1:
-000029 fd00                      	SBRC R16, PB0 ; Determino si el boton de aumentar esta presionado 
-00002a c001                      	RJMP Decrementar1 ; De no estar presionado, verifico el otro botón
-00002b 9533                      	INC R19 ; De estar presionado, aumento contador R19
+00002a fd00                      	SBRC R16, PB0 ; Determino si el boton de aumentar esta presionado 
+00002b c001                      	RJMP Decrementar1 ; De no estar presionado, verifico el otro botón
+00002c 9533                      	INC R19 ; De estar presionado, aumento contador R19
                                  
                                  Decrementar1:
-00002c fd01                      	SBRC R16, PB1 ; Determino si el boton de decrementar esta presionado 
-00002d c001                      	RJMP Aumentar2 ; De no estar presionado, vuelvo al CALL
-00002e 953a                      	DEC R19 ; De estar presionado, disminuyo contador R19
+00002d fd01                      	SBRC R16, PB1 ; Determino si el boton de decrementar esta presionado 
+00002e c001                      	RJMP Aumentar2 ; De no estar presionado, vuelvo al CALL
+00002f 953a                      	DEC R19 ; De estar presionado, disminuyo contador R19
                                  
                                  ; CONTADOR 2 R20
                                  Aumentar2:
-00002f fd02                      	SBRC R16, PB2 ; Determino si el boton de aumentar esta presionado 
-000030 c001                      	RJMP Decrementar2 ; De no estar presionado, verifico el otro botón
-000031 9543                      	INC R20 ; De estar presionado, aumento contador R20
+000030 fd02                      	SBRC R16, PB2 ; Determino si el boton de aumentar esta presionado 
+000031 c001                      	RJMP Decrementar2 ; De no estar presionado, verifico el otro botón
+000032 9543                      	INC R20 ; De estar presionado, aumento contador R20
                                  
                                  Decrementar2:
-000032 fd03                      	SBRC R16, PB3 ; Determino si el boton de decrementar esta presionado 
-000033 9508                      	RET ; De no estar presionado, vuelvo al CALL
-000034 954a                      	DEC R20 ; De estar presionado, disminuyo contador R20
+000033 fd03                      	SBRC R16, PB3 ; Determino si el boton de decrementar esta presionado 
+000034 9508                      	RET ; De no estar presionado, vuelvo al CALL
+000035 954a                      	DEC R20 ; De estar presionado, disminuyo contador R20
                                  
-000035 9508                      	RET ; Al terminar, vuelvo al CALL
+000036 9508                      	RET ; Al terminar, vuelvo al CALL
                                  
                                  ;-----------------------------------------------
                                  
                                  Combinacion:
-000036 703f                      	ANDI R19, 0X0F ; Modificar ambos contadores a solo 4 bits
-000037 704f                      	ANDI R20, 0X0F
-000038 9542                      	SWAP R20 ; Cambiar de lugar Nibbles de R20
-000039 2f53                      	MOV R21, R19 ; Copiar R19 a R21
-00003a 2b54                      	OR R21, R20 ; Combinar el R19 con R20 en R21
-00003b 9542                      	SWAP R20 ; Regreso R20 a su forma original
-00003c b95b                      	OUT PORTD, R21 ; Despliego R21 en todo el PIND
-00003d 9508                      	RET ; Regreso al CALL
+000037 703f                      	ANDI R19, 0X0F ; Modificar ambos contadores a solo 4 bits
+000038 704f                      	ANDI R20, 0X0F
+000039 9542                      	SWAP R20 ; Cambiar de lugar Nibbles de R20
+00003a 2f53                      	MOV R21, R19 ; Copiar R19 a R21
+00003b 2b54                      	OR R21, R20 ; Combinar el R19 con R20 en R21
+00003c 9542                      	SWAP R20 ; Regreso R20 a su forma original
+00003d b95b                      	OUT PORTD, R21 ; Despliego R21 en todo el PIND
+00003e 9508                      	RET ; Regreso al CALL
                                  
                                  ;-----------------------------------------------
                                  
                                  
                                  Sumas:
-00003e fd04                      	SBRC R16, PB4; Determino si el boton de suma esta presionado
-00003f 9508                      	RET ; De no estar presionado, vuelvo al CALL
-000040 2f63                      	MOV R22, R19 ; De estar presionado copio R19 a R22
-000041 0f64                      	ADD R22, R20 ; Realizo la suma de R19 y R20 en R22
-000042 716f                      	ANDI R22, 0X1F; Verifico que sean solo 5 bits (4 mas carry)
-000043 b968                      	OUT PORTC, R22; Despliego el resultado en PORTC
-000044 9508                      	RET ; Al terminar, vuelvo al CALL
+00003f fd04                      	SBRC R16, PB4; Determino si el boton de suma esta presionado
+000040 9508                      	RET ; De no estar presionado, vuelvo al CALL
+000041 2f63                      	MOV R22, R19 ; De estar presionado copio R19 a R22
+000042 0f64                      	ADD R22, R20 ; Realizo la suma de R19 y R20 en R22
+000043 716f                      	ANDI R22, 0X1F; Verifico que sean solo 5 bits (4 mas carry)
+000044 b968                      	OUT PORTC, R22; Despliego el resultado en PORTC
+000045 9508                      	RET ; Al terminar, vuelvo al CALL
                                  
 
 
@@ -1188,7 +1189,7 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  22 r17:   4 r18:   4 r19:   6 r20:   8 
+r13:   0 r14:   0 r15:   0 r16:  22 r17:   5 r18:   4 r19:   6 r20:   8 
 r21:   4 r22:   5 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 7 out of 35 (20.0%)
@@ -1204,7 +1205,7 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
 cpi   :   1 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   2 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  11 lds   :   0 lpm   :   0 lsl   :   0 
+ld    :   0 ldd   :   0 ldi   :  12 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   3 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   0 or    :   1 ori   :   0 out   :   8 pop   :   0 
 push  :   0 rcall :   0 ret   :   6 reti  :   0 rjmp  :   4 rol   :   0 
@@ -1218,7 +1219,7 @@ Instructions used: 19 out of 113 (16.8%)
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00008a    138      0    138   32768   0.4%
+[.cseg] 0x000000 0x00008c    140      0    140   32768   0.4%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
